@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.add_dependency("em-websocket", "~>0.3.0")
+  s.add_development_dependency('em-http-request', '~> 0.2.6')
 end
