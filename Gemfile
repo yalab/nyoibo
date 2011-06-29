@@ -1,4 +1,6 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in nyoibo.gemspec
+gem 'turn'
+gem "shoulda-matchers", :git => "https://github.com/thoughtbot/shoulda-matchers.git"
+gem "shoulda-context",  :git => "https://github.com/thoughtbot/shoulda-context.git"
 gemspec
