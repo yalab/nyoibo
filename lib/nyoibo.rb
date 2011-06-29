@@ -1,0 +1,3 @@
+module Nyoibo
+  # Your code goes here...
+end
