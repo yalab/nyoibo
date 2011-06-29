@@ -1,3 +1,3 @@
 module Nyoibo
-  # Your code goes here...
+  extend Configuration
 end
