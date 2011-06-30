@@ -14,7 +14,7 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
   context "run" do
     setup do
       @file = File.new(File.expand_path("../../fixtures/test.jpg", __FILE__), "rb")
-      Nyoibo.configuration do
+      Nyoibo.configure do
         host "localhost"
         port 3030
       end

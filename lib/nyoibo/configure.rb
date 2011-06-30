@@ -1,7 +1,7 @@
 module Nyoibo
-  module Configuration
+  module Configure
     attr_accessor :config
-    def configuration(&block)
+    def configure(&block)
       @config = Config.new
       @config.instance_exec(&block)
     end

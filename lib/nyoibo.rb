@@ -1,11 +1,11 @@
 require 'em-websocket'
 require 'json'
-require 'nyoibo/configuration'
+require 'nyoibo/configure'
 require 'nyoibo/daemon'
 require 'nyoibo/callback'
 
 module Nyoibo
-  extend Configuration
+  extend Configure
   extend Daemon
   extend Callback::Runner
 end

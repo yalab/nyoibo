@@ -1,8 +1,8 @@
 require 'test_helper'
-class Nyoibo::ConfigurationTest < Test::Unit::TestCase
-  context ".configuration" do
+class Nyoibo::ConfigureTest < Test::Unit::TestCase
+  context ".configure" do
     setup do
-      Nyoibo.configuration do
+      Nyoibo.configure do
         host 'localhost'
         port 3030
       end
