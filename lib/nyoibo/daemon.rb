@@ -15,6 +15,7 @@ module Nyoibo
             case msg
             when CMD_QUIT
               ws.send("OK Bye")
+              # p ws.request["path"]
               EventMachine.stop
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
@@ -26,6 +27,7 @@ module Nyoibo
               @binary << Base64.decode64(msg)
               ws.send("NEXT")
             else
+              #FIXME
               ws.send("QUIT")
             end
           }
