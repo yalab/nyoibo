@@ -11,11 +11,11 @@ module Nyoibo
             ws.send "OK Ready"
           }
           ws.onmessage{|msg|
-            @binary ||= ""
+            @encoded ||= ""
             case msg
             when CMD_QUIT
               ws.send("OK Bye")
-              # p ws.request["path"]
+              Nyoibo.run_callback(ws.request["path"], @json, Base64.decode64(@encoded))
               EventMachine.stop
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
@@ -24,7 +24,7 @@ module Nyoibo
               ws.send("NEXT")
             when CMD_BASE64
               msg.gsub!(CMD_BASE64, '')
-              @binary << Base64.decode64(msg)
+              @encoded << msg
               ws.send("NEXT")
             else
               #FIXME

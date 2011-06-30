@@ -10,16 +10,17 @@ module Nyoibo
     module ClassMethod
       def uploaded(path, &block)
         if Nyoibo::Callback.callbacks[path]
-          raise "Already defined '#{path}' updated callback."
+          logger = Logger.new(STDERR)
+          logger.warn "Already defined '#{path}' updated callback."
         end
         Nyoibo::Callback.callbacks[path] = block
       end
     end
 
     module Runner
-      def run_callback(path="/")
+      def run_callback(path="/", *args)
         block = Nyoibo::Callback.callbacks[path]
-        block.call
+        block.call(*args)
       end
     end
   end

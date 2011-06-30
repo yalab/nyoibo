@@ -1,5 +1,16 @@
 require 'test_helper'
 class Nyoibo::DaemonTest < Test::Unit::TestCase
+  class TestApp < Test::Unit::TestCase
+    include Nyoibo::Callback
+    uploaded "/" do |json, binary|
+      File.open("/tmp/test.jpg", "w"){|f|
+        f.write(binary)
+      }
+      raise "finame is not 'test.jpg'" if json["filename"] != "test.jpg"
+      raise "Binary size is not '3137' byte" if binary.length != 3137
+    end
+  end
+
   context "run" do
     setup do
       @file = File.new(File.expand_path("../../fixtures/test.jpg", __FILE__), "rb")
@@ -23,10 +34,14 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
             when "NEXT"
               @end = @start + @sendsize
               @encoded ||= Base64.encode64(@file.read)
+
               @end = @encoded.size - 1 if @end >= @encoded.size
-              http.send('BASE64: ' + @encoded.slice(@start...@end))
+              if @start == @encoded.size
+                http.send("QUIT")
+              else
+                http.send('BASE64: ' + @encoded.slice(@start..@end))
+              end
               @start = @end + 1
-              http.send("QUIT") if @start >= @encoded.size
             when "OK Bye"
               EventMachine.stop
             end
