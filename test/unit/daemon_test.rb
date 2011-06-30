@@ -42,9 +42,10 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
                 http.send('BASE64: ' + @encoded.slice(@start..@end))
               end
               @start = @end + 1
-            when "OK Bye"
-              EventMachine.stop
             end
+          }
+          http.disconnect{
+            EventMachine.stop
           }
         end
         Nyoibo.run

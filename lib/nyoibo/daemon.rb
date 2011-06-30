@@ -10,13 +10,15 @@ module Nyoibo
           ws.onopen{
             ws.send "OK Ready"
           }
+          ws.onclose{
+            ws.send "OK Bye"
+          }
           ws.onmessage{|msg|
             @encoded ||= ""
             case msg
             when CMD_QUIT
-              ws.send("OK Bye")
               Nyoibo.run_callback(ws.request["path"], @json, Base64.decode64(@encoded))
-              EventMachine.stop
+              ws.close_connection
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
               @json = JSON.parse(msg)
@@ -24,11 +26,14 @@ module Nyoibo
               ws.send("NEXT")
             when CMD_BASE64
               msg.gsub!(CMD_BASE64, '')
-              @encoded << msg
-              ws.send("NEXT")
+              if msg.length > 0
+                @encoded << msg
+                ws.send("NEXT")
+              else
+                ws.send("EMPTY")
+              end
             else
-              #FIXME
-              ws.send("QUIT")
+              ws.send("UNKNOWN")
             end
           }
         end
@@ -36,7 +41,7 @@ module Nyoibo
       if ENV["Nyoibo_ENV"] == "test"
         daemon.call
       else
-        @pid = Process.fork daemon
+        @pid = Process.fork &daemon
       end
     end
   end
