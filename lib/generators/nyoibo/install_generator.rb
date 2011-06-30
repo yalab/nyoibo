@@ -1,3 +1,5 @@
+require 'rails'
+require 'rails/generators'
 module Nyoibo
   module Generators
     class InstallGenerator < Rails::Generators::Base
@@ -5,7 +7,7 @@ module Nyoibo
 
       desc "Creates a Nyoibo initializer and copy locale files to your application."
       def copy_initializer
-        template "nyoibo.rb", "config/initializers/nyoibo.rb"
+        template "nyoibo.rb.erb", "config/initializers/nyoibo.rb"
       end
     end
   end
