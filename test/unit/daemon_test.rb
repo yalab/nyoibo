@@ -3,7 +3,7 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
   class TestApp < Test::Unit::TestCase
     include Nyoibo::Callback
     uploaded "/" do |json, binary|
-      File.open("/tmp/test.jpg", "w"){|f|
+      File.open("/tmp/test.jpg", "w:binary"){|f|
         f.write(binary)
       }
       raise "finame is not 'test.jpg'" if json["filename"] != "test.jpg"
@@ -39,7 +39,12 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
               if @start == @encoded.size
                 http.send("QUIT")
               else
-                http.send('BASE64: ' + @encoded.slice(@start..@end))
+                chunk = @encoded.slice(@start..@end)
+                if @start == 0
+                  chunk = "data:application/octet-stream;base64," + chunk
+                end
+
+                http.send(chunk)
               end
               @start = @end + 1
             end

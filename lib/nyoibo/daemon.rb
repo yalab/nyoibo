@@ -3,7 +3,7 @@ module Nyoibo
     attr_reader :pid
     CMD_QUIT = /^QUIT$/
     CMD_JSON = /^JSON: /
-    CMD_BASE64 = /^BASE64: /
+    TYPE_BASE64 = %r|^data:application/octet-stream;base64,|
     def run
       return if defined?(IRB)
       daemon = lambda{
@@ -15,26 +15,35 @@ module Nyoibo
             ws.send "OK Bye"
           }
           ws.onmessage{|msg|
-            @encoded ||= ""
+            @binary ||= ""
+            @binary_type ||= 'binary'
             case msg
             when CMD_QUIT
-              Nyoibo.run_callback(ws.request["path"], @json, Base64.decode64(@encoded))
+              if @binary_type == 'base64'
+                @binary = Base64.decode64(@binary)
+              elsif @binary.encoding == Encoding::UTF_8
+                @binary = @binary.unpack('U*').pack('c*')
+              end
+              Nyoibo.run_callback(ws.request["path"], @json, @binary)
               ws.close_connection
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
               @json = JSON.parse(msg)
               @json['size'] = @json['size'].to_i
               ws.send("NEXT")
-            when CMD_BASE64
-              msg.gsub!(CMD_BASE64, '')
+            else
+
+              if msg =~ TYPE_BASE64
+                msg.gsub!(TYPE_BASE64, '')
+                @binary_type = 'base64'
+              end
+
               if msg.length > 0
-                @encoded << msg
+                @binary << msg
                 ws.send("NEXT")
               else
                 ws.send("EMPTY")
               end
-            else
-              ws.send("UNKNOWN")
             end
           }
         end
