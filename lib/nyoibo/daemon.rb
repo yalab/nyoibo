@@ -5,6 +5,7 @@ module Nyoibo
     CMD_JSON = /^JSON: /
     CMD_BASE64 = /^BASE64: /
     def run
+      return if defined?(IRB)
       daemon = lambda{
         EventMachine::WebSocket.start(:host => config.host, :port => config.port) do |ws|
           ws.onopen{
