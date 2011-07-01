@@ -17,9 +17,3 @@ Test::Unit::TestCase.module_eval do
     fail
   end
 end
-
-EventMachine::HttpClient.module_eval do
-  def env
-    ENV
-  end
-end
