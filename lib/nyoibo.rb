@@ -9,3 +9,7 @@ module Nyoibo
   extend Daemon
   extend Callback::Runner
 end
+
+if defined?(Rails)
+  require 'nyoibo/railtie'
+end

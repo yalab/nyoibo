@@ -1,4 +1,6 @@
 require "nyoibo"
+require 'nyoibo/nyoibo_helper'
+
 module Nyoibo
   class Railtie < Rails::Railtie
     config.after_initialize do
