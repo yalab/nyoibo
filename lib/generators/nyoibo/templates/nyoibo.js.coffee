@@ -1,6 +1,9 @@
+`WEB_SOCKET_DEBUG = true;
+ WEB_SOCKET_SWF_LOCATION = '/WebSocketMain.swf';`
 jQuery ($)->
-  progress = new html5jp.progress("ws-progress")
-  progress.draw()
+  if $("#ws-progress").length > 0
+    progress = new html5jp.progress("ws-progress")
+    progress.draw()
 
   form = $('#ws-form')
   progress_bar = $("#ws-progress")
