@@ -9,11 +9,12 @@ module Nyoibo
 
     module ClassMethod
       def uploaded(path, &block)
-        if Nyoibo::Callback.callbacks[path]
-          logger = Logger.new(STDERR)
-          logger.warn "Already defined '#{path}' updated callback."
+        if ENV["NYOIBO_ENV"] == "production" && Nyoibo::Callback.callbacks[path]
+          raise "Already defined '#{path}' updated callback."
         end
         Nyoibo::Callback.callbacks[path] = block
+
+        Process.kill(:TERM, Nyoibo.pid) && Nyoibo.run if ENV["NYOIBO_ENV"] == "development"
       end
     end
 
