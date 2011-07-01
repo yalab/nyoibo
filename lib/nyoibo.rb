@@ -11,5 +11,7 @@ module Nyoibo
 end
 
 if defined?(Rails)
+  require 'rails'
+  require 'nyoibo/rails'
   require 'nyoibo/railtie'
 end
