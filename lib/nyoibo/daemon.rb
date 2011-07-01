@@ -38,7 +38,7 @@ module Nyoibo
           }
         end
       }
-      if ENV["Nyoibo_ENV"] == "test"
+      if ENV["NYOIBO_ENV"] == "test"
         daemon.call
       else
         @pid = Process.fork &daemon

@@ -9,7 +9,7 @@ require 'turn'
 
 Dir.glob(File.expand_path("../../lib/**/*.rb", __FILE__)).each {|f| require f }
 
-ENV["Nyoibo_ENV"] = "test"
+ENV["NYOIBO_ENV"] = "test"
 
 Test::Unit::TestCase.module_eval do
   def failed
