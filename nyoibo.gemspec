@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = ""
   s.summary     = %q{Websocket uploader with progressbar.}
   s.description = %q{}
+  s.license     = 'MIT'
 
   s.rubyforge_project = "nyoibo"
 
