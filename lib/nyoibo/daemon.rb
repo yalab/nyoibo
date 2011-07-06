@@ -13,6 +13,7 @@ module Nyoibo
           }
           ws.onclose{
             ws.send "OK Bye"
+            ws.unbind
           }
           ws.onmessage{|msg|
             @binary ||= ""
