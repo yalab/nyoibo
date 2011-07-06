@@ -23,4 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency("json", "~>1.5.3")
   s.add_development_dependency('em-http-request', '~> 0.2.6')
   s.add_development_dependency('railties')
+  s.add_development_dependency('coffee-script')
+  s.add_development_dependency('sinatra')
+  s.add_development_dependency('sinatra-reloader')
 end
