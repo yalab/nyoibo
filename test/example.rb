@@ -51,6 +51,7 @@ get '/' do
 <form id="ws-form">
   <input type="file">
   <input type="submit">
+  <input type="text" name="name" value="yalab">
 </form>
 <div id="ws-progress"></div>
 </body>

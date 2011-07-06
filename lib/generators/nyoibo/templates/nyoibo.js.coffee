@@ -1,5 +1,26 @@
 `WEB_SOCKET_DEBUG = true;
  WEB_SOCKET_SWF_LOCATION = '/WebSocketMain.swf';`
+
+jQuery.fn.serializeObject = () ->
+  arrayData = this.serializeArray()
+  objectData = {}
+
+  $.each arrayData, () ->
+    if this.value?
+      value = this.value
+    else
+      value = ''
+
+    if objectData[this.name]?
+      unless objectData[this.name].push
+        objectData[this.name] = [objectData[this.name]]
+
+      objectData[this.name].push value
+    else
+      objectData[this.name] = value
+
+  return objectData
+
 jQuery ($)->
   if $("#ws-progress").length > 0
     progress = new html5jp.progress("ws-progress")
@@ -38,6 +59,8 @@ jQuery ($)->
       switch evt.data
         when 'OK Ready'
           params = {filename: file.name, comment: $('#post_comment').val(), size: max_length, session_string:  $('#session_string').val()}
+          for k, v of form.serializeObject()
+            params[k] = v
           ws.send("JSON: " + JSON.stringify(params))
         when 'OK Bye'
           ws.close()
