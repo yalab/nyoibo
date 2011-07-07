@@ -28,14 +28,19 @@ module Nyoibo
               elsif @binary.encoding == Encoding::UTF_8
                 @binary = @binary.unpack('U*').pack('c*')
               end
-              Nyoibo.run_callback(ws.request["path"], @json, @binary)
+              Nyoibo.run_callback(:after, ws.request["path"], @json, @binary)
               @binary = @json = nil
               ws.close_connection
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
               @json = JSON.parse(msg)
               @json['size'] = @json['size'].to_i
-              ws.send("NEXT")
+              if Nyoibo.run_callback(:before, ws.request["path"], @json, @binary) == false
+                ws.send("ABORT")
+                ws.close_connection
+              else
+                ws.send("NEXT")
+              end
             else
 
               if msg =~ TYPE_BASE64
