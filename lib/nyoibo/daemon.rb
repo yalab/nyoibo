@@ -7,13 +7,16 @@ module Nyoibo
     def run
       return if defined?(IRB)
       daemon = lambda{
+        at_exit do
+          Process.kill(:INT, Process.ppid)
+        end unless ENV['NYOIBO_ENV'] == 'test'
         EventMachine::WebSocket.start(:host => config.host, :port => config.port) do |ws|
           ws.onopen{
             ws.send "OK Ready"
           }
           ws.onclose{
             ws.send "OK Bye"
-            ws.unbind
+            ws.close_websocket
           }
           ws.onmessage{|msg|
             @binary ||= ""
@@ -26,6 +29,7 @@ module Nyoibo
                 @binary = @binary.unpack('U*').pack('c*')
               end
               Nyoibo.run_callback(ws.request["path"], @json, @binary)
+              @binary = @json = nil
               ws.close_connection
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
@@ -53,6 +57,10 @@ module Nyoibo
         daemon.call
       else
         @pid = Process.fork &daemon
+        at_exit do
+          Process.kill(:INT, Nyoibo.pid) if Nyoibo.pid
+          Nyoibo.pid = nil
+        end
       end
     end
   end
