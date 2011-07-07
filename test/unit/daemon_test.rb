@@ -2,7 +2,7 @@ require 'test_helper'
 class Nyoibo::DaemonTest < Test::Unit::TestCase
   class TestApp < Test::Unit::TestCase
     include Nyoibo::Callback
-    uploaded "/" do |json, binary|
+    after_upload "/" do |json, binary|
       File.open("/tmp/test.jpg", "w:binary"){|f|
         f.write(binary)
       }

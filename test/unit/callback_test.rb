@@ -2,7 +2,7 @@ require 'test_helper'
 class Nyoibo::CallbackTest < Test::Unit::TestCase
   class TestApp
     include Nyoibo::Callback
-    uploaded "/" do
+    after_upload "/" do
       "uploaded!"
     end
   end
