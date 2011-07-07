@@ -30,6 +30,10 @@ end
 Process.fork do
   Nyoibo.run
 end
+
+
+set :public, File.expand_path('../../vendor/web-socket-js', __FILE__)
+
 get '/' do
   @post = Post.new
   erubis <<EOS
@@ -38,9 +42,12 @@ get '/' do
 <head>
 <title>nyoibo</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="/swfobject.js"></script>
+<script src="/web_socket.js"></script>
 <script>
-#{File.read File.expand_path('../../vendor/html5jp/progress.js', __FILE__)}
+#{File.read File.open(File.expand_path("../../vendor/html5jp/progress.js", __FILE__))}
 </script>
+
 <script>
 #{CoffeeScript.compile(File.read(File.expand_path('../../lib/generators/nyoibo/templates/nyoibo.js.coffee', __FILE__)))}
 </script>
