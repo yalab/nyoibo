@@ -37,12 +37,11 @@ module Nyoibo
               @json['size'] = @json['size'].to_i
               if Nyoibo.run_callback(:before, ws.request["path"], @json, @binary) == false
                 ws.send("ABORT")
-                ws.close_connection
+                ws.close_websocket
               else
                 ws.send("NEXT")
               end
             else
-
               if msg =~ TYPE_BASE64
                 msg.gsub!(TYPE_BASE64, '')
                 @binary_type = 'base64'
@@ -64,7 +63,6 @@ module Nyoibo
         @pid = Process.fork &daemon
         at_exit do
           Process.kill(:INT, Nyoibo.pid) if Nyoibo.pid
-          Nyoibo.pid = nil
         end
       end
     end

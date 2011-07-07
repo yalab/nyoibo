@@ -13,7 +13,7 @@ class Post
   attr_accessor :file
 
   include Nyoibo::Callback
-  uploaded "/" do |params, binary|
+  after_upload "/" do |params, binary|
     File.open('/tmp/test.jpg', 'w:binary') do |f|
       f.write(binary)
     end
@@ -21,6 +21,9 @@ class Post
     File.open('/tmp/test.json', 'w:binary') do |f|
       f.write(params)
     end
+  end
+  before_upload "/" do |params|
+    params['name'] == "yalab"
   end
 end
 Nyoibo.configure do
