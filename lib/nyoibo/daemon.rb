@@ -7,9 +7,6 @@ module Nyoibo
     def run
       return if defined?(IRB)
       daemon = lambda{
-        at_exit do
-          Process.kill(:INT, Process.ppid)
-        end unless ENV['NYOIBO_ENV'] == 'test'
         EventMachine::WebSocket.start(:host => config.host, :port => config.port) do |ws|
           ws.onopen{
             ws.send "OK Ready"
