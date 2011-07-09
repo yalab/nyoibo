@@ -1,0 +1,57 @@
+= Nyoibo
+
+A websocket file uploader with progressbar module.
+
+== Features
+
+=== Any frameworks
+You can use Rails or Sinatra and so on, especially this contains rails generator.
+
+== Install(gem)
+  $ gem install nyoibo
+
+== Install(bundler)
+Put this line in your Gemfile:
+  gem 'nyoibo'
+
+Then bundle:
+  $ bundle install
+
+== Usage(Rails 3.1)
+==== Generate config and coffee-script files
+  $ rails g nyoibo:install
+
+=== View
+  <%= ws_form_for(@post) do |f| %>
+    file:&nbsp;<%= f.file_field :photo, :size => 40 %><br>
+    comment:&nbsp;<%= f.text_field :comment, :size => 40 %><br>
+    <%= f.submit 'upload' %>
+  <% end %>
+
+=== Write callback on Controlller
+  class SomeController < ApplicationController
+    before_upload "/" do |params|
+      if params["confirm"] == false
+        return false # Not to start uploading if return false.
+      end
+    end
+
+    after_upload "/" do |params, binary|
+      File.open("/tmp/#{params['filename']}", "wb:binary") do |f|
+        f.write(binary)
+      end
+    end
+  end
+
+== Usage(Sinatra)
+See test/example.rb
+
+== Questions, Feedback
+
+Message me on Github (yalab) or Twitter (@yalab)
+
+== Licence
+MIT-LICENSE
+
+== Copyright
+Copyright (c) 2011 Atsushi Yoshida(yalab).
