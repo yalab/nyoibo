@@ -9,7 +9,6 @@ module Nyoibo
       desc "Creates a Nyoibo initializer and copy javascript and locale files to your application."
       def copy_initializer
         template "nyoibo.rb.erb", "config/initializers/nyoibo.rb"
-        template "nyoibo_en.yml", "config/locales/nyoibo_en.yml"
         template "nyoibo.js.coffee", "app/assets/javascripts/nyoibo.js.coffee"
         template "upload.js.coffee", "app/assets/javascripts/upload.js.coffee"
         copy_file "../../../../vendor/html5jp/progress.js", "app/assets/javascripts/progress.js"
