@@ -54,6 +54,9 @@ get '/' do
 <script>
 #{CoffeeScript.compile(File.read(File.expand_path('../../lib/generators/nyoibo/templates/nyoibo.js.coffee', __FILE__)))}
 </script>
+<script>
+#{CoffeeScript.compile(File.read(File.expand_path('../../lib/generators/nyoibo/templates/upload.js.coffee', __FILE__)))}
+</script>
 </head>
 <body>
 
@@ -62,6 +65,7 @@ get '/' do
   <input type="file">
   <input type="submit">
   <input type="text" name="name" value="yalab">
+  <input type="hidden" name="age" value="28">
 </form>
 <div id="ws-progress"></div>
 </body>
