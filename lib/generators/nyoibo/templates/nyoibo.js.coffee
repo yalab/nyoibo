@@ -41,12 +41,12 @@ class Nyoibo
         when 'OK Bye'
           ws.progressbar.set_val(100)
           ws.after_upload.apply(@)
+          ws.close()
         when 'ABORT'
           ws.upload_abort.apply(@)
         when 'EMPTY'
           ws.send("QUIT")
           ws.progressbar.set_val(100)
-          ws.after_upload.apply(@)
         when 'NEXT'
           val = Math.floor(start / filesize * 100)
           ws.progressbar.set_val(val)

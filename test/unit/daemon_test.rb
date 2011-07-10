@@ -31,6 +31,8 @@ class Nyoibo::DaemonTest < Test::Unit::TestCase
             case  msg
             when "OK Ready"
               http.send("JSON: " + {:filename => File.basename(@file.path), :size => @file.size}.to_json)
+            when "OK Bye"
+              http.close_connection
             when "NEXT"
               @end = @start + @sendsize
               @encoded ||= Base64.encode64(@file.read)

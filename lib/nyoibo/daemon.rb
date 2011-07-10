@@ -12,7 +12,6 @@ module Nyoibo
             ws.send "OK Ready"
           }
           ws.onclose{
-            ws.send "OK Bye"
             ws.close_websocket
           }
           ws.onmessage{|msg|
@@ -27,7 +26,7 @@ module Nyoibo
               end
               Nyoibo.run_callback(:after, ws.request["path"], @json, @binary)
               @binary = @json = nil
-              ws.close_connection
+              ws.send("OK Bye")
             when CMD_JSON
               msg.gsub!(CMD_JSON, '')
               @json = JSON.parse(msg)
@@ -59,7 +58,7 @@ module Nyoibo
       else
         @pid = Process.fork &daemon
         at_exit do
-          Process.kill(:INT, Nyoibo.pid) if Nyoibo.pid
+          Process.kill(:KILL, Nyoibo.pid) if Nyoibo.pid
         end
       end
     end
