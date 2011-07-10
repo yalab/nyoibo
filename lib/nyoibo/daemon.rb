@@ -6,7 +6,7 @@ module Nyoibo
     TYPE_BASE64 = %r|^data:application/octet-stream;base64,|
     def run
       return if defined?(IRB)
-      return unless defined?(config)
+      return unless Nyoibo.config
       daemon = lambda{
         EventMachine::WebSocket.start(:host => config.host, :port => config.port) do |ws|
           ws.onopen{
