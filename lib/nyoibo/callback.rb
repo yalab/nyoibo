@@ -15,10 +15,6 @@ module Nyoibo
               raise "Already defined #{prefix} updated callback."
             end
             Nyoibo::Callback.callbacks[:#{prefix}][path] = block
-            if ENV["NYOIBO_ENV"] == "development"
-              Process.kill(:INT, Nyoibo.pid)
-              Nyoibo.run
-            end
           end
         EOS
       end
